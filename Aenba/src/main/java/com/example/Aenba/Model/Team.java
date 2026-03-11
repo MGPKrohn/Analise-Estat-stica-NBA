@@ -27,4 +27,10 @@ public class Team {
         this.abbreviation = abbreviation;
         this.coachName = coachName;
     }
+
+    public Team(Long teamId, String teamName, String abbreviation) {
+        this.id = teamId;
+        this.name = teamName;
+        this.abbreviation = abbreviation;
+    }
 }

@@ -8,8 +8,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfig {
 
     @Bean
-    public WebClient nbaWebClient(WebClient.Builder builder) {
-        return builder
+    public WebClient nbaWebClient() {
+        // Usamos WebClient.builder() diretamente em vez de injetar no parâmetro
+        return WebClient.builder()
                 .baseUrl("https://stats.nba.com/stats")
                 .defaultHeader("Host", "stats.nba.com")
                 .defaultHeader("Connection", "keep-alive")
@@ -21,5 +22,4 @@ public class WebClientConfig {
                 .defaultHeader("Origin", "https://www.nba.com")
                 .build();
     }
-
 }
