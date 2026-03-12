@@ -19,13 +19,19 @@ public class NbaService {
     private final ObjectMapper objectMapper;
 
     public void importTeams() {
-        try {
-            String jsonResponse = nbaClient.fetchCommonAllPlayers();
-            NbaResponseDTO response = objectMapper.readValue(jsonResponse, NbaResponseDTO.class);
 
-            // A API da NBA retorna os dados no primeiro ResultSet
+        try {
+            System.out.println("Iniciando busca de dados na NBA...");
+            String jsonResponse = nbaClient.fetchCommonAllPlayers();
+
+            // Se o print abaixo aparecer vazio ou nulo, o problema é na conexão (NbaClient)
+            System.out.println("Resposta da API recebida! Tamanho: " + (jsonResponse != null ? jsonResponse.length() : 0));
+
+            NbaResponseDTO response = objectMapper.readValue(jsonResponse, NbaResponseDTO.class);
             var resultSet = response.getResultSets().get(0);
             List<List<Object>> rows = resultSet.getRowSet();
+
+            System.out.println("Total de registros encontrados no JSON: " + rows.size());
 
             for (List<Object> row : rows) {
                 // De acordo com a documentação da API, o TEAM_ID costuma estar no índice 2 
@@ -41,12 +47,14 @@ public class NbaService {
                     team.setAbbreviation(abbreviation);
                     teamRepository.save(team);
                     teamRepository.save(team);
+                    System.out.println("Salvando time: " + row.get(3).toString());
                 }
             }
             System.out.println("Times importados com sucesso!");
 
 
         } catch (Exception e) {
+            System.err.println("ERRO DURANTE A IMPORTAÇÃO: " + e.getMessage());
             e.printStackTrace();
         }
     }

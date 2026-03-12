@@ -1,5 +1,7 @@
 package com.example.Aenba.Config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,5 +23,11 @@ public class WebClientConfig {
                 .defaultHeader("Referer", "https://www.nba.com/")
                 .defaultHeader("Origin", "https://www.nba.com")
                 .build();
+    }
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper;
     }
 }
