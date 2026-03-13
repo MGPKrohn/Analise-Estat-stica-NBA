@@ -3,6 +3,7 @@ package com.example.Aenba.Model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 @Table(name = "teams")
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Team {
     @Id
     private Long id;
@@ -19,14 +21,6 @@ public class Team {
     private String city;
     private String abbreviation;
     private String coachName;
-
-    public Team(Long id, String name, String city, String abbreviation, String coachName) {
-        this.id = id;
-        this.name = name;
-        this.city = city;
-        this.abbreviation = abbreviation;
-        this.coachName = coachName;
-    }
 
     public Team(Long teamId, String teamName, String abbreviation) {
         this.id = teamId;

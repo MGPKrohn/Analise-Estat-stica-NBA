@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor // Garanta que o plugin do Lombok esteja ativo no IntelliJ
 public class NbaService {
 
     private final NbaClient nbaClient;
@@ -19,42 +19,30 @@ public class NbaService {
     private final ObjectMapper objectMapper;
 
     public void importTeams() {
-
         try {
-            System.out.println("Iniciando busca de dados na NBA...");
             String jsonResponse = nbaClient.fetchCommonAllPlayers();
-
-            // Se o print abaixo aparecer vazio ou nulo, o problema é na conexão (NbaClient)
-            System.out.println("Resposta da API recebida! Tamanho: " + (jsonResponse != null ? jsonResponse.length() : 0));
+            if (jsonResponse == null) return;
 
             NbaResponseDTO response = objectMapper.readValue(jsonResponse, NbaResponseDTO.class);
             var resultSet = response.getResultSets().get(0);
             List<List<Object>> rows = resultSet.getRowSet();
 
-            System.out.println("Total de registros encontrados no JSON: " + rows.size());
-
             for (List<Object> row : rows) {
-                // De acordo com a documentação da API, o TEAM_ID costuma estar no índice 2 
-                // e o TEAM_NAME no índice 3 no endpoint commonallplayers
                 Long teamId = Long.valueOf(row.get(2).toString());
                 String teamName = row.get(3).toString();
                 String abbreviation = row.get(4).toString();
 
-                if (teamId != 0) { // Filtra jogadores sem time (Free Agents)
+                if (teamId != 0) {
                     Team team = new Team();
                     team.setId(teamId);
                     team.setName(teamName);
                     team.setAbbreviation(abbreviation);
+
                     teamRepository.save(team);
-                    teamRepository.save(team);
-                    System.out.println("Salvando time: " + row.get(3).toString());
                 }
             }
             System.out.println("Times importados com sucesso!");
-
-
         } catch (Exception e) {
-            System.err.println("ERRO DURANTE A IMPORTAÇÃO: " + e.getMessage());
             e.printStackTrace();
         }
     }

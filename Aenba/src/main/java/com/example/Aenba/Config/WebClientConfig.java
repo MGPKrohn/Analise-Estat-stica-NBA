@@ -22,6 +22,8 @@ public class WebClientConfig {
                 .defaultHeader("x-nba-stats-token", "true")
                 .defaultHeader("Referer", "https://www.nba.com/")
                 .defaultHeader("Origin", "https://www.nba.com")
+                .defaultHeader("Accept-Language", "en-US,en;q=0.9")
+                .defaultHeader("Accept-Encoding", "gzip, deflate, br")
                 .build();
     }
     @Bean

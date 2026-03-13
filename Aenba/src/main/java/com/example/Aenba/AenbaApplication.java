@@ -20,3 +20,10 @@ public class AenbaApplication {
         };
     }
 }
+/*
+Debugar AMANHÃ
+
+Erro na requisição: java.util.concurrent.TimeoutException: Did not observe any item or terminal signal within 10000ms in 'flatMap' (and no fallback has been configured)
+ERRO DURANTE A IMPORTAÇÃO: argument "content" is null
+java.lang.IllegalArgumentException: argument "content" is null
+ */

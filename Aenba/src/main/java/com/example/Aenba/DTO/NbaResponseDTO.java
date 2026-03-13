@@ -9,9 +9,11 @@ public class NbaResponseDTO {
 
     @Data
     public static class ResultSetDTO {
+        private String name;
         private List<String> headers;
         private List<List<Object>> rowSet;
     }
+}
 
     /*
     Para proxima etapa do projeto e conseguir fazer o primeiro teste de API da NBA preciso concertar o seguinte erro
@@ -37,4 +39,3 @@ Consider defining a bean of type 'com.fasterxml.jackson.databind.ObjectMapper' i
 Process finished with exit code 0
 
      */
-}
