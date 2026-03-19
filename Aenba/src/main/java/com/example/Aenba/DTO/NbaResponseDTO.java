@@ -7,9 +7,8 @@ import java.util.List;
 public class NbaResponseDTO {
     private List<ResultSetDTO> resultSets;
 
-    @Data
-    public static class ResultSetDTO {
-        private String name;
+    @Data // Adicione isso aqui!
+    public static class ResultSetDTO { // Adicione o 'static'!
         private List<String> headers;
         private List<List<Object>> rowSet;
     }

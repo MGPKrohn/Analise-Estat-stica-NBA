@@ -8,10 +8,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-
 @Service
-@RequiredArgsConstructor // Garanta que o plugin do Lombok esteja ativo no IntelliJ
+@RequiredArgsConstructor
 public class NbaService {
 
     private final NbaClient nbaClient;
@@ -20,8 +21,9 @@ public class NbaService {
 
     public void importTeams() {
         try {
-            String jsonResponse = nbaClient.fetchCommonAllPlayers();
-            if (jsonResponse == null) return;
+            // FALLBACK: Leia do arquivo local para pular o bloqueio de rede
+            InputStream is = getClass().getResourceAsStream("/teams.json");
+            String jsonResponse = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 
             NbaResponseDTO response = objectMapper.readValue(jsonResponse, NbaResponseDTO.class);
             var resultSet = response.getResultSets().get(0);
@@ -29,19 +31,18 @@ public class NbaService {
 
             for (List<Object> row : rows) {
                 Long teamId = Long.valueOf(row.get(2).toString());
-                String teamName = row.get(3).toString();
-                String abbreviation = row.get(4).toString();
-
                 if (teamId != 0) {
                     Team team = new Team();
                     team.setId(teamId);
-                    team.setName(teamName);
-                    team.setAbbreviation(abbreviation);
+                    team.setName(row.get(3).toString());
+                    team.setAbbreviation(row.get(4).toString());
+                    team.setCity(row.get(5).toString());
+                    team.setCoachName(row.get(6).toString());
 
                     teamRepository.save(team);
                 }
             }
-            System.out.println("Times importados com sucesso!");
+            System.out.println("Dados salvos no banco com sucesso!");
         } catch (Exception e) {
             e.printStackTrace();
         }

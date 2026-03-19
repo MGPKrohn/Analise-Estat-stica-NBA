@@ -25,7 +25,7 @@ public class NbaClient {
                             .build())
                     .retrieve()
                     .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(10)) // <--- Se não responder em 10s, ele cancela
+                    .timeout(Duration.ofSeconds(60)) // <--- Se não responder em 10s, ele cancela
                     .block();
         } catch (Exception e) {
             System.err.println("Erro na requisição: " + e.getMessage());
